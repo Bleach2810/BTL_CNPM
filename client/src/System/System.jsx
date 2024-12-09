@@ -180,6 +180,26 @@ export default function System() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+};
+
+  function System() { 
+  const [printers, setPrinters] = useState([]); 
+  const [showDetailModal, setShowDetailModal] = useState(false); 
+  const [selectedPrinter, setSelectedPrinter] = useState({}); 
+
+  useEffect(() => { 
+    axiosInstance.get('/printers') 
+      .then(response => { 
+        setPrinters(response.data); 
+      }) 
+      .catch(error => { 
+        console.error('There was an error fetching the printer data!', error); 
+      }); 
+    }, []); 
+    const handleShowDetailModal = (printer) => { 
+      setSelectedPrinter(printer); 
+      setShowDetailModal(true); 
+    };
 
   return (
     <>
@@ -290,6 +310,12 @@ export default function System() {
         </div>
       </div>
 
+      {/* Hiển thị Modal Thông tin chi tiết máy in */} 
+      <PrinterDetailModal 
+      show={showDetailModal} 
+      onHide={() => setShowDetailModal(false)} 
+      printer={selectedPrinter} />
+      
       {/* Modal for Adding New Printer */}
       <div
         className="modal fade"
